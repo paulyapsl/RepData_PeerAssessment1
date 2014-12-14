@@ -15,11 +15,9 @@ activity_table<-read.csv("activity.csv",sep = ",",h=T) #create the table
 ````
 
 #What is mean total number of steps taken per day?
-````{r part2,echo=TRUE}
-png("hist.png", width=800, height=800)
+````{r histogram, fig.height=4, echo=TRUE}
 meantotal_steps<-sapply(split(activity_table$steps,activity_table$date),sum,na.rm=TRUE)
 hist(meantotal_steps,xlab="Total Number of Steps each day",main="Frequency of Total Number of Steps each day",ylim=c(0,30))
-dev.off()
 
 #calculate the mean and media
 meantotal_steps_table<-as.data.frame(meantotal_steps)
@@ -39,10 +37,8 @@ activity_table$interval<-as.factor(activity_table$interval) #factorize the inter
 interval_avgsteps_agg<-aggregate(activity_table$steps~activity_table$interval,FUN=mean,na.rm=T)
 colnames(interval_avgsteps_agg)<-c("interval","avg_steps")
 
-png("avgdailyactivity.png", width=1600, height=800)
 interval_avgsteps_agg$interval<-as.integer(interval_avgsteps_agg$interval) #change to integer so that lines can be drawn
 plot(interval_avgsteps_agg$interval,interval_avgsteps_agg$avg_steps,type="l",col="blue",xlab="Interval",ylab="Average Nos. of Steps Taken (Averaged Across All Days)")
-dev.off()
 
 #to find the 5-min interval with the maximum number os steps
 max_steps<-max(interval_avgsteps_agg$avg_steps)
@@ -83,10 +79,8 @@ if (grep(date_avgsteps_agg$unique[i],activity_table3$unique)>0)
 ````
 ##4) Make a histogram of the total number of steps taken each day and calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 ````{r part6,echo=TRUE}
-png("hist_withmissingfilled.png", width=800, height=800)
 meantotal_steps2<-sapply(split(activity_table3$steps,activity_table3$date),sum,na.rm=TRUE)
 hist(meantotal_steps2,xlab="Total Number of Steps each day",main="Frequency of Total Number of Steps each day",ylim=c(0,30))
-dev.off()
 
 #calculate the mean and media
 meantotal_steps_table2<-as.data.frame(meantotal_steps2)
@@ -118,7 +112,5 @@ colnames(interval_avgsteps_agg2)<-c("interval","day","avg_steps")
 ````{r part8,echo=TRUE}
 library(ggplot2)
 interval_avgsteps_agg2$interval<-as.integer(interval_avgsteps_agg2$interval)#change to integer so that lines can be drawn
-png("panelplot.png")
 qplot(interval,avg_steps, data=interval_avgsteps_agg2,facets=day~.,xlab="Interval",ylab="Avg No. of Steps (Avg across all weekday/end days)",geom=c("line"))
-dev.off()
 ````
